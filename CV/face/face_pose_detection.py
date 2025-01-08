@@ -1,5 +1,5 @@
 '''
-눈 10초이상 감는 것 도 인식 기능 만들어야 함
+눈 10초이상 감는 것 도 인식 기능 만들어야 함 (완)
 영상으로 온 것도 판단해서 구분해야 함
 '''
 import cv2
@@ -50,17 +50,57 @@ with mp_face_mesh.FaceMesh(
                 # 하단과 상단 세로 거리 비교를 통해 기울기 계산
                 relative_tilt = vertical_diff_down / vertical_diff_up
 
+                # 눈 감지(제작 중)
+                l_eyes_h = landmark[159]
+                l_eyes_r = landmark[145]
+
+                r_eyes_h = landmark[386]
+                r_eyes_r = landmark[374]
+
+                l_eyes_h_y = l_eyes_h.y * 1000
+                l_eyes_r_y = l_eyes_r.y * 1000
+
+                r_eyes_h_y = r_eyes_h.y * 1000
+                r_eyes_r_y = r_eyes_r.y * 1000
+
+                l_eyes = abs(l_eyes_h_y - l_eyes_r_y)
+                r_eyes = abs(r_eyes_h_y - r_eyes_r_y)
+
+
+                # 랜드마크 x, y 좌표 가져오기
+                x_coords = [lm.x for lm in face_landmarks.landmark]
+                y_coords = [lm.y for lm in face_landmarks.landmark]
+
+                # 최소, 최대 좌표로 bounding box 계산
+                min_x, max_x = min(x_coords), max(x_coords)
+                min_y, max_y = min(y_coords), max(y_coords)
+
+                # bounding box 크기 계산
+                face_width = max_x - min_x
+                face_height = max_y - min_y
+
+                face_size = face_width * face_height * 1000
+
+
+
+                # 기준 크기 설정
+                if face_size < 46:  # threshold_size는 초기 근접 거리 기준
+                    cv2.putText(frame, "Too Far!", (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                else:
+                    cv2.putText(frame, "Close Enough!", (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+
+
+
+
+
                 # 하단 기울기 감지
-                if relative_tilt < 0.7 or relative_tilt > 3.43:  # 상대적으로 턱 끝과 가까워질수록 하단을 보고 있다고 판단
+                if relative_tilt < 0.7 or relative_tilt > 3.43 or l_eyes < 3 or r_eyes < 3:  # 상대적으로 턱 끝과 가까워질수록 하단을 보고 있다고 판단
                     cv2.putText(frame, "BAD!", (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
                 else:
                     cv2.putText(frame, "GOOD!", (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
-                #눈 감지(제작 중)
-                l_eyes_h = landmark[44]
-                l_eyes_r = landmark[48]
 
-                print(f'left eye: {l_eyes_h.y * 1000, l_eyes_r.y * 1000}')
 
                 # 기울기를 화면 왼쪽 하단에 표시
                 text_tilt = f"Tilt: {relative_tilt:.2f}"  # 소수점 두 자리로 표시

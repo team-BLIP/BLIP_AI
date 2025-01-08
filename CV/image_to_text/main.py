@@ -7,10 +7,10 @@ import numpy as np
 pytesseract.pytesseract.tesseract_cmd = r'C:\Tesseract-OCR\tesseract.exe'
 
 # 사용할 이미지 위치 주소 변수에 저장
-image = r"C:\폴더들\project\AIexpo\img\image.png"
+image = r"C:\folders\project\BLIP_AI_temp\CV\image_to_text\img\image.png"
 
 # 이미지 파일 읽기
-img = cv2.imdecode(np.fromfile(r'C:\폴더들\project\AIexpo\img\image.png', dtype=np.uint8), cv2.IMREAD_COLOR)
+img = cv2.imdecode(np.fromfile(r'C:\folders\project\BLIP_AI_temp\CV\image_to_text\img\image.png', dtype=np.uint8), cv2.IMREAD_COLOR)
 
 
 # 글자 추출 전처리를 위해 흑백으로 변환
