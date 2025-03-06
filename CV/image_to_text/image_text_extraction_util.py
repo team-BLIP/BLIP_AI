@@ -6,7 +6,7 @@ import numpy as np
 pytesseract.pytesseract.tesseract_cmd = r'C:\Tesseract-OCR\tesseract.exe'
 
 # 이미지 경로
-IMAGE_PATH = r'C:\폴더들\project\AIexpo\img\image3.png'
+IMAGE_PATH = r'/CV/face/image/hc/WIN_20250305_21_36_36_Pro.jpg'
 
 selected_boxes = []  # 선택된 경계 상자 저장
 selected_texts = []  # 선택된 단어 저장
