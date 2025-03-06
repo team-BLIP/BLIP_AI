@@ -82,7 +82,7 @@ with mp_face_mesh.FaceMesh(
                 face_size = face_width * face_height * 1000
 
 
-                print(l_eyes, r_eyes)
+                print(chin_tip.z * 1000)
 
                 # 기준 크기 설정
                 if face_size < 46:  # threshold_size는 초기 근접 거리 기준

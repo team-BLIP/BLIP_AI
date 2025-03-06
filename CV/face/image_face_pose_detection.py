@@ -9,7 +9,7 @@ def main():
     mp_drawing = mp.solutions.drawing_utils
 
     # 이미지 파일 경로 설정
-    image_path = r"C:\folders\project\BLIP_AI_main\CV\face\image\mj\WIN_20250305_22_48_48_Pro.jpg"  # 여기에 분석할 이미지 파일 경로를
+    image_path = r"C:\folders\project\BLIP_AI_main\CV\face\image\WIN_20250307_15_23_34_Pro.jpg"  # 여기에 분석할 이미지 파일 경로를
 
     image = cv2.imread(image_path)
 
@@ -82,33 +82,24 @@ def main():
 
                 chack = {
                     'far':0,
-                    'relative_tilt':0,
-                    'eyes':0
+                    'situation':0,
                 }
 
                 # 기준 크기 설정
-                if face_size < 46:  # threshold_size는 초기 근접 거리 기준
-                    chack['far'] = 1
-                    #cv2.putText(image, "Too Far!", (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                if face_size < 46:
+                    chack['far'] = 2 #먼
+
                 elif face_size > 350:
-                    chack['far'] = 2
-                    #cv2.putText(image, "Close Enough!", (30, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                    chack['far'] = 1 #가까운
+
 
                 # 하단 기울기 감지
-                if relative_tilt < 0.7 or relative_tilt > 3.43:  # 상대적으로 턱 끝과 가까워질수록 하단을 보고 있다고 판단
-                    chack['relative_tilt'] = 1
-                    #cv2.putText(image, "BAD!", (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-                #else:
-                #    cv2.putText(image, "GOOD!", (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                if relative_tilt < 0.7 or relative_tilt > 3.43 and chin_tip > 18:  # 상대적으로 턱 끝과 가까워질수록 하단을 보고 있다고 판단
+                    chack['situation'] = 1
 
-                print(l_eyes, r_eyes)
 
                 if l_eyes < 11 or r_eyes < 11:
-                    chack['eyes'] = 1
-
-                # 기울기를 화면 왼쪽 하단에 표시
-                #text_tilt = f"Tilt: {relative_tilt:.2f}"  # 소수점 두 자리로 표시
-                #cv2.putText(image, text_tilt, (10, height - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+                    chack['situation'] = 1
 
                 return chack
 
