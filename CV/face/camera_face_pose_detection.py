@@ -36,6 +36,15 @@ with mp_face_mesh.FaceMesh(
         if results.multi_face_landmarks:
             for face_landmarks in results.multi_face_landmarks:
                 # 랜드마크 가져오기
+
+                for landmark_index in range(362, 464):
+                    landmark = face_landmarks.landmark[landmark_index]
+                    h, w, _ = frame.shape
+                    cx, cy = int(landmark.x * w), int(landmark.y * h)
+
+                    # 랜드마크를 원으로 표시
+                    cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)
+
                 landmark = face_landmarks.landmark
 
                 # 랜드마크 인덱스
