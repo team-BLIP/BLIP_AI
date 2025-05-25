@@ -42,14 +42,14 @@ async def websocket_endpoint(websocket: WebSocket):
             try:
                 # 클라이언트로부터 데이터 수신
                 data = await websocket.receive_text()
-                logger.info(f"받은 데이터: {data}")
+
                 json_data = json.loads(data)
 
                 user_id = json_data.get("id")
                 base64_image = json_data.get("image")
 
                 if not user_id or not base64_image:
-                    await websocket.send_text(json.dumps({"error": "Invalid data format"}))
+                    await websocket.send_text(json.dumps({"result": False}))
                     continue
 
                 # 이미지 저장
@@ -79,10 +79,10 @@ async def websocket_endpoint(websocket: WebSocket):
                 break
             except json.JSONDecodeError as e:
                 logger.error(f"JSON 디코딩 오류: {e}")
-                await websocket.send_text(json.dumps({"error": "Invalid JSON format"}))
+                await websocket.send_text(json.dumps({"result": False}))
             except Exception as e:
                 logger.error(f"데이터 처리 중 오류 발생: {e}")
-                await websocket.send_text(json.dumps({"error": "Internal server error"}))
+                await websocket.send_text(json.dumps({"result": False}))
 
     except Exception as e:
         logger.error(f"WebSocket 연결 중 오류 발생: {e}")
@@ -146,12 +146,12 @@ def face_detection(image_path):
                 elif face_size > 20000:
                     result['far'] = 1  # 가깝다
 
-                if (relative_tilt < 0.7 or relative_tilt > 3.43) and chin_tip_y > height * 0.85:
+                print(f'relative_tilt: {relative_tilt}, chin_tip_y: {chin_tip_y}, height: {height * 0.8}')
+                if relative_tilt < 0.7 or relative_tilt > 3.43:
                     result['situation'] = 1  # 아래를 보고 있음
 
-
-
-                return result
+        print(f'result: {result}')
+        return result
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

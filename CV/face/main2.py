@@ -35,7 +35,7 @@ def face_detection():
     # Mediapipe 초기화
     mp_face_mesh = mp.solutions.face_mesh
 
-    image_path = './image/test.jpg'
+    image_path = './uploaded_images/test.jpg'
     image = cv2.imread(image_path)
 
     if image is None or image.size == 0:
@@ -145,7 +145,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 image_data = base64.b64decode(base64_image)
                 img = Image.open(io.BytesIO(image_data))
 
-                file_name = f"{uuid4()}.jpg"
+                file_name = f"test.jpg"
                 file_path = os.path.join(IMAGE_DIR, file_name)
                 img.save(file_path)
 
